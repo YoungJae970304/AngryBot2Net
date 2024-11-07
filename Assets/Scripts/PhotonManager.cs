@@ -8,15 +8,15 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 {
     // 게임의 버전
     private readonly string version = "1.0";
-    // 유저의 닉네임
-    private string userId = "Zack";
+    // 닉네임
+    private string userId = "YoungJae";
 
     // 유저명을 입력할 TextMeshPro Input Field
     public TMP_InputField userIF;
     // 룸 이름을 입력할 TextMeshPro Input Field
     public TMP_InputField roomNameIF;
 
-    // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리 자료형
+    // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리
     private Dictionary<string, GameObject> rooms = new Dictionary<string, GameObject>();
     // 룸 목록을 표시할 프리팹
     private GameObject roomItemPrefab;
@@ -30,7 +30,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         // 게임 버전 설정
         PhotonNetwork.GameVersion = version;
         // 접속 유저의 닉네임 설정
-        // PhotonNetwork.NickName = userId;
+        PhotonNetwork.NickName = userId;
 
         // 포톤 서버와의 데이터의 초당 전송 횟수
         Debug.Log(PhotonNetwork.SendRate);
@@ -77,7 +77,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         if (string.IsNullOrEmpty(roomNameIF.text))
         {
-            roomNameIF.text = $"ROOM_{Random.Range(1,101):000}";
+            roomNameIF.text = $"YJ_ROOM_{Random.Range(1,101):000}";
         }
 
         return roomNameIF.text;
@@ -86,8 +86,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // 포톤 서버에 접속 후 호출되는 콜백 함수
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to Master!");
-        Debug.Log($"PhotonNetwork.InLobby = {PhotonNetwork.InLobby}");
         PhotonNetwork.JoinLobby();
     }
 
@@ -133,13 +131,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             Debug.Log($"{player.Value.NickName} , {player.Value.ActorNumber}");
         }
-
-        // 출현 위치 정보를 배열에 저장
-        // Transform[] points = GameObject.Find("SpawnPointGroup").GetComponentsInChildren<Transform>();    
-        // int idx = Random.Range(1, points.Length);
-
-        // 네트워크상에 캐릭터 생성
-        // PhotonNetwork.Instantiate("Player", points[idx].position, points[idx].rotation, 0); 
 
         // 마스터 클라이언트인 경우에 룸에 입장한 후 전투 씬을 로딩한다.
         if (PhotonNetwork.IsMasterClient)
